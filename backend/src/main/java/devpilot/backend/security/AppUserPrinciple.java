@@ -11,8 +11,10 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import devpilot.backend.entity.User;
 
 public class AppUserPrinciple  implements OAuth2User{
+  
  private final User user;
  private final Map<String,Object> attributes;
+
    public AppUserPrinciple(User user,Map<String,Object> attributes){
     this.user=user;
     this.attributes=attributes;
