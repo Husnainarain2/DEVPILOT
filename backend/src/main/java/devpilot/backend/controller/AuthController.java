@@ -1,0 +1,43 @@
+package devpilot.backend.controller;
+
+import java.util.Map;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.openai.models.admin.organization.auditlogs.AuditLogListResponse.Actor.ApiKey.User;
+
+import devpilot.backend.dto.UserResponse;
+import devpilot.backend.security.AppUserPrinciple;
+import devpilot.backend.security.CurrentUser;
+import lombok.RequiredArgsConstructor;
+
+@RestController 
+@RequestMapping("/api/auth")
+@RequiredArgsConstructor 
+public class AuthController {
+    private final CurrentUser currentUser;
+    
+    @GetMapping ("/login-url")
+    public Map<String,String> loginUrl(){
+        return Map.of("url","/oauth2/authorization/github");
+    }
+    @GetMapping ("/me")
+    public ResponseEntity<UserResponse> me(){
+        AppUserPrinciple principle=currentUser.require();
+        devpilot.backend.entity.User user =principle.getUser();
+
+        return ResponseEntity.ok(
+           new UserResponse(
+            user.getId(),
+            user.getGithubId(),
+            user.getGithubUsername(),
+            user.getDisplayName(),
+            user.getAvatarUrl()
+           )
+        );
+    }
+}
