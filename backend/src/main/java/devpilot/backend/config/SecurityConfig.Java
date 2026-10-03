@@ -4,11 +4,13 @@
 public class SecurityConfig {
 
     private final GithubOAuth2UserService githubOAuth2UserService;
-    private final AuthenticationSuccessHandler oauth2AuthSuccessHandler;
-    private final AuthenticationFailureHandler oAuth2AuthenticationFailureHandler;
+   
 
     @Bean
-    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    SecurityFilterChain securityFilterChain(HttpSecurity http,
+        AuthenticationSuccessHandler oauth2AuthSuccessHandler,
+        AuthenticationFailureHandler oAuth2AuthenticationFailureHandler
+    ) throws Exception {
 
         http
             .cors(Customizer.withDefaults())
